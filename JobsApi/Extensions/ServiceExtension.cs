@@ -25,7 +25,7 @@ public static class ServiceExtension
         {
             x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
             x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        });
+        }).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, null!);
         serviceCollection.AddSingleton<IConfigureOptions<JwtBearerOptions>, JwtConfigureService>();
     }
     

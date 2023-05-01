@@ -1,6 +1,6 @@
-﻿namespace JobsApi.Models;
+﻿namespace JobsApi.Dtos.User;
 
-public enum UserModelType
+public enum UserDtoType
 {
     Admin = 0,
     Professional = 1,

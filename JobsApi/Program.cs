@@ -1,5 +1,6 @@
 using JobsApi.Database;
 using JobsApi.Extensions;
+using JobsApi.Middlewares;
 using JobsApi.Workers;
 using Lina.DynamicMapperConfiguration;
 using Lina.DynamicServicesProvider;
@@ -29,6 +30,8 @@ app.UseHttpLogging();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.MapControllers();
 
