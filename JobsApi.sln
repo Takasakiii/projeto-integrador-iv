@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobsApi", "JobsApi\JobsApi.csproj", "{04C7AF47-E31B-427E-9408-0D3E102E903F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{04C7AF47-E31B-427E-9408-0D3E102E903F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04C7AF47-E31B-427E-9408-0D3E102E903F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04C7AF47-E31B-427E-9408-0D3E102E903F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04C7AF47-E31B-427E-9408-0D3E102E903F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
