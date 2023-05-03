@@ -19,9 +19,12 @@ public class UserService : IUserService
     private readonly IMapper _mapper;
     private readonly IJwtService _jwtService;
     private readonly IValidator<UserCreateDto> _userCreateValidator;
+    private readonly IValidator<UserFilterDto> _userFilterValidator;
+    private readonly IPaginationService _paginationService;
 
     public UserService(IUserRepository userRepository, IAppConfig appConfig, IUnityOfWork unityOfWork, IMapper mapper,
-        IJwtService jwtService, IValidator<UserCreateDto> userCreateValidator)
+        IJwtService jwtService, IValidator<UserCreateDto> userCreateValidator,
+        IValidator<UserFilterDto> userFilterValidator, IPaginationService paginationService)
     {
         _userRepository = userRepository;
         _appConfig = appConfig;
@@ -29,6 +32,8 @@ public class UserService : IUserService
         _mapper = mapper;
         _jwtService = jwtService;
         _userCreateValidator = userCreateValidator;
+        _userFilterValidator = userFilterValidator;
+        _paginationService = paginationService;
     }
 
     public async ValueTask CreateAdminUser()
@@ -65,7 +70,7 @@ public class UserService : IUserService
 
         if (model is null)
             throw new NotFoundException("User", id);
-        
+
         return _mapper.Map<UserDto>(model);
     }
 
@@ -80,5 +85,16 @@ public class UserService : IUserService
         await _unityOfWork.SaveChanges();
 
         return _mapper.Map<UserDto>(model);
+    }
+
+    public async Task<IEnumerable<UserDto>> List(UserFilterDto userFilter)
+    {
+        await _userFilterValidator.ValidateAndThrowAsync(userFilter);
+        
+        var (users, count) = await _userRepository.Filter(userFilter);
+        
+        _paginationService.SetCount(count);
+
+        return _mapper.Map<IEnumerable<UserDto>>(users);
     }
 }

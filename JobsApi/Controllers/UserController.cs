@@ -37,13 +37,35 @@ public class UserController : ControllerBase
         return Ok(user);
     }
 
+    [HttpGet("{id}")]
+    [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(UserDto))]
+    [SwaggerResponse((int)HttpStatusCode.NotFound, type: typeof(ErrorDto))]
+    public async Task<IActionResult> Get([FromRoute] uint id)
+    {
+        var user = await _userService.GetById(id);
+
+        return Ok(user);
+    }
+
     [HttpPost]
     [SwaggerResponse((int)HttpStatusCode.Created, type: typeof(UserDto))]
-    [SwaggerResponse((int)HttpStatusCode.Conflict)]
+    [SwaggerResponse((int)HttpStatusCode.Conflict, type: typeof(ErrorDto))]
     [SwaggerResponse((int)HttpStatusCode.BadRequest, type: typeof(IEnumerable<ValidationFailure>))]
     public async Task<IActionResult> Create([FromBody] UserCreateDto userCreate)
     {
         var user = await _userService.Create(userCreate);
-        return Ok(user);
+        return CreatedAtAction(nameof(Get), new
+        {
+            user.Id
+        }, user);
+    }
+
+    [HttpGet]
+    [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(IEnumerable<UserDto>))]
+    [SwaggerResponse((int)HttpStatusCode.BadRequest, type: typeof(IEnumerable<ValidationFailure>))]
+    public async Task<IActionResult> List([FromQuery] UserFilterDto userFilter)
+    {
+        var users = await _userService.List(userFilter);
+        return Ok(users);
     }
 }

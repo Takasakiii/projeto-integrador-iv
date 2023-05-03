@@ -1,8 +1,10 @@
-﻿using JobsApi.Models;
+﻿using JobsApi.Dtos;
+using JobsApi.Models;
 
 namespace JobsApi.Repositories.Interfaces;
 
 public interface IUserRepository : IBaseRepository<UserModel>
 {
     Task<UserModel?> GetByEmail(string email);
+    Task<(IEnumerable<UserModel>, int)> Filter(UserFilterDto filter);
 }

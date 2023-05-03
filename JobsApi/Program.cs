@@ -13,6 +13,7 @@ builder.Services.AddDbContext<AppDbContext>();
 builder.Services.AddDynamicServices<Program>();
 builder.Services.AddDynamicMappers<Program>();
 builder.Services.AddHostedService<DatabaseWorker>();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddAppConfig();
 builder.Services.AddAppJwt();

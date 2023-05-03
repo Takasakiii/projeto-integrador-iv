@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using FluentValidation;
+using JobsApi.Dtos;
 using JobsApi.Exceptions;
 using Lina.DynamicServicesProvider.Attributes;
 
@@ -27,20 +28,20 @@ public class ExceptionMiddleware : IMiddleware
         }
         catch (AuthException ex)
         {
-            await WriteResponse(context, HttpStatusCode.Unauthorized, "Email or password is not match");
+            await WriteResponse(context, HttpStatusCode.Unauthorized, new ErrorDto("Email or password is not match"));
         }
         catch (NotFoundException ex)
         {
-            await WriteResponse(context, HttpStatusCode.NotFound, ex.Message);
+            await WriteResponse(context, HttpStatusCode.NotFound, new ErrorDto(ex.Message));
         }
         catch (DuplicateException ex)
         {
-            await WriteResponse(context, HttpStatusCode.Conflict, ex.Message);
+            await WriteResponse(context, HttpStatusCode.Conflict, new ErrorDto(ex.Message));
         }
         catch (Exception ex)
         {
             _logger.LogError("Message: {}\nStack: {}", ex.Message, ex.StackTrace);
-            await WriteResponse(context, HttpStatusCode.InternalServerError, ex.Message);
+            await WriteResponse(context, HttpStatusCode.InternalServerError, new ErrorDto(ex.Message));
         }
     }
 
