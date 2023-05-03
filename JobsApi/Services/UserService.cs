@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using JobsApi.Configs;
-using JobsApi.Dtos.Auth;
-using JobsApi.Dtos.User;
+using JobsApi.Dtos;
 using JobsApi.Exceptions;
 using JobsApi.Models;
 using JobsApi.Repositories.Interfaces;
@@ -18,15 +18,17 @@ public class UserService : IUserService
     private readonly IUnityOfWork _unityOfWork;
     private readonly IMapper _mapper;
     private readonly IJwtService _jwtService;
+    private readonly IValidator<UserCreateDto> _userCreateValidator;
 
     public UserService(IUserRepository userRepository, IAppConfig appConfig, IUnityOfWork unityOfWork, IMapper mapper,
-        IJwtService jwtService)
+        IJwtService jwtService, IValidator<UserCreateDto> userCreateValidator)
     {
         _userRepository = userRepository;
         _appConfig = appConfig;
         _unityOfWork = unityOfWork;
         _mapper = mapper;
         _jwtService = jwtService;
+        _userCreateValidator = userCreateValidator;
     }
 
     public async ValueTask CreateAdminUser()
@@ -64,6 +66,19 @@ public class UserService : IUserService
         if (model is null)
             throw new NotFoundException("User", id);
         
+        return _mapper.Map<UserDto>(model);
+    }
+
+    public async Task<UserDto> Create(UserCreateDto userCreate)
+    {
+        await _userCreateValidator.ValidateAndThrowAsync(userCreate);
+
+        var model = _mapper.Map<UserModel>(userCreate);
+        model.Password = BCrypt.Net.BCrypt.HashPassword(userCreate.Password);
+
+        await _userRepository.Add(model);
+        await _unityOfWork.SaveChanges();
+
         return _mapper.Map<UserDto>(model);
     }
 }

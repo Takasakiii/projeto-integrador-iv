@@ -2,7 +2,7 @@
 using System.Security.Claims;
 using System.Text;
 using JobsApi.Configs;
-using JobsApi.Dtos.User;
+using JobsApi.Dtos;
 using JobsApi.Services.Interfaces;
 using Lina.DynamicServicesProvider.Attributes;
 using Microsoft.IdentityModel.Tokens;

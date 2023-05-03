@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using JobsApi.Dtos.User;
+using JobsApi.Dtos;
 using JobsApi.Models;
 using Lina.DynamicMapperConfiguration.Abstracts;
 
-namespace JobsApi.Mappers.User;
+namespace JobsApi.Mappers;
 
 public class UserModelToUserDto : DynamicMapperProfile<UserModel, UserDto>
 {

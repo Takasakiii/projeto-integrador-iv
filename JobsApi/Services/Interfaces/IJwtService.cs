@@ -1,4 +1,4 @@
-﻿using JobsApi.Dtos.User;
+﻿using JobsApi.Dtos;
 
 namespace JobsApi.Services.Interfaces;
 

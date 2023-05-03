@@ -1,4 +1,4 @@
-﻿namespace JobsApi.Dtos.User;
+﻿namespace JobsApi.Dtos;
 
 public enum UserDtoType
 {
