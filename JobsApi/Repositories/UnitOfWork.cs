@@ -8,13 +8,13 @@ using MySqlConnector;
 
 namespace JobsApi.Repositories;
 
-[Repository(typeof(IUnityOfWork))]
-public class UnityOfWork : IUnityOfWork
+[Repository(typeof(IUnitOfWork))]
+public class UnitOfWork : IUnitOfWork
 {
     private const int Duplicate = 1062;
     private readonly AppDbContext _dbContext;
 
-    public UnityOfWork(AppDbContext dbContext)
+    public UnitOfWork(AppDbContext dbContext)
     {
         _dbContext = dbContext;
     }

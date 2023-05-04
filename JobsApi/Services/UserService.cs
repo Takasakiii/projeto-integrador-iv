@@ -15,20 +15,20 @@ public class UserService : IUserService
 {
     private readonly IUserRepository _userRepository;
     private readonly IAppConfig _appConfig;
-    private readonly IUnityOfWork _unityOfWork;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly IJwtService _jwtService;
     private readonly IValidator<UserCreateDto> _userCreateValidator;
     private readonly IValidator<UserFilterDto> _userFilterValidator;
     private readonly IPaginationService _paginationService;
 
-    public UserService(IUserRepository userRepository, IAppConfig appConfig, IUnityOfWork unityOfWork, IMapper mapper,
+    public UserService(IUserRepository userRepository, IAppConfig appConfig, IUnitOfWork unitOfWork, IMapper mapper,
         IJwtService jwtService, IValidator<UserCreateDto> userCreateValidator,
         IValidator<UserFilterDto> userFilterValidator, IPaginationService paginationService)
     {
         _userRepository = userRepository;
         _appConfig = appConfig;
-        _unityOfWork = unityOfWork;
+        _unitOfWork = unitOfWork;
         _mapper = mapper;
         _jwtService = jwtService;
         _userCreateValidator = userCreateValidator;
@@ -44,7 +44,7 @@ public class UserService : IUserService
         {
             var password = BCrypt.Net.BCrypt.HashPassword(_appConfig.Admin.Password);
             await _userRepository.Add(new UserModel("Admin", "admin@jobs.com", UserModelType.Admin, password));
-            await _unityOfWork.SaveChanges();
+            await _unitOfWork.SaveChanges();
         }
     }
 
@@ -82,7 +82,7 @@ public class UserService : IUserService
         model.Password = BCrypt.Net.BCrypt.HashPassword(userCreate.Password);
 
         await _userRepository.Add(model);
-        await _unityOfWork.SaveChanges();
+        await _unitOfWork.SaveChanges();
 
         return _mapper.Map<UserDto>(model);
     }

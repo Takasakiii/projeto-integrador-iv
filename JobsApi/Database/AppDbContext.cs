@@ -16,6 +16,7 @@ public class AppDbContext : DbContext
     }
 
     public DbSet<UserModel> Users => Set<UserModel>();
+    public DbSet<SkillModel> Skills => Set<SkillModel>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

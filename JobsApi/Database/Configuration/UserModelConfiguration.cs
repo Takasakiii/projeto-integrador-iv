@@ -8,6 +8,7 @@ public class UserModelConfiguration : IEntityTypeConfiguration<UserModel>
 {
     public void Configure(EntityTypeBuilder<UserModel> builder)
     {
+        builder.ToTable("Users");
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Name).HasMaxLength(255).IsRequired();
