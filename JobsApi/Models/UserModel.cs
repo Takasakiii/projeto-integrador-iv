@@ -15,4 +15,6 @@ public class UserModel
     public string Email { get; set; }
     public UserModelType Type { get; set; }
     public string Password { get; set; }
+    public string? ImageId { get; set; }
+    public ImageModel? Image { get; set; }
 }

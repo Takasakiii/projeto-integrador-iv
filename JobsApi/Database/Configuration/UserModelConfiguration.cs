@@ -15,7 +15,10 @@ public class UserModelConfiguration : IEntityTypeConfiguration<UserModel>
         builder.Property(x => x.Email).HasMaxLength(255).IsRequired();
         builder.Property(x => x.Type).IsRequired();
         builder.Property(x => x.Password).HasMaxLength(92).IsRequired();
+        builder.Property(x => x.ImageId).HasMaxLength(32);
 
         builder.HasIndex(x => x.Email).IsUnique();
+
+        builder.HasOne(x => x.Image).WithMany().OnDelete(DeleteBehavior.Restrict);
     }
 }
