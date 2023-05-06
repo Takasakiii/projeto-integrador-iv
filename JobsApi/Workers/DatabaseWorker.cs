@@ -20,6 +20,5 @@ public class DatabaseWorker : BackgroundService
         var userService = scope.ServiceProvider.GetRequiredService<IUserService>();
         
         await context.Database.MigrateAsync(cancellationToken: stoppingToken);
-        await userService.CreateAdminUser();
     }
 }

@@ -38,6 +38,10 @@ public class ExceptionMiddleware : IMiddleware
         {
             await WriteResponse(context, HttpStatusCode.Conflict, new ErrorDto(ex.Message));
         }
+        catch (PermissionException ex)
+        {
+            await WriteResponse(context, HttpStatusCode.Forbidden, new ErrorDto(ex.Message));
+        }
         catch (Exception ex)
         {
             _logger.LogError("Message: {}\nStack: {}", ex.Message, ex.StackTrace);

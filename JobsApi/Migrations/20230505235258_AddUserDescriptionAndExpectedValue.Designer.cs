@@ -3,6 +3,7 @@ using System;
 using JobsApi.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JobsApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230505235258_AddUserDescriptionAndExpectedValue")]
+    partial class AddUserDescriptionAndExpectedValue
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,16 +68,16 @@ namespace JobsApi.Migrations
                         .HasColumnType("int unsigned");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)");
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
 
-                    b.Property<uint?>("ExpectedValue")
-                        .HasColumnType("int unsigned");
+                    b.Property<int?>("ExpectedValue")
+                        .HasColumnType("int");
 
                     b.Property<string>("ImageId")
                         .HasMaxLength(32)
@@ -91,10 +93,6 @@ namespace JobsApi.Migrations
                         .HasMaxLength(92)
                         .HasColumnType("varchar(92)");
 
-                    b.Property<string>("Role")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
@@ -108,43 +106,6 @@ namespace JobsApi.Migrations
                     b.ToTable("Users", (string)null);
                 });
 
-            modelBuilder.Entity("JobsApi.Models.WorkModel", b =>
-                {
-                    b.Property<uint>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int unsigned");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<DateTimeOffset?>("EndAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTimeOffset>("StartAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2023, 5, 6, 3, 44, 51, 277, DateTimeKind.Unspecified).AddTicks(8849), new TimeSpan(0, 0, 0, 0, 0)));
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<uint>("UserId")
-                        .HasColumnType("int unsigned");
-
-                    b.Property<uint>("Value")
-                        .HasColumnType("int unsigned");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Works", (string)null);
-                });
-
             modelBuilder.Entity("JobsApi.Models.UserModel", b =>
                 {
                     b.HasOne("JobsApi.Models.ImageModel", "Image")
@@ -153,22 +114,6 @@ namespace JobsApi.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Image");
-                });
-
-            modelBuilder.Entity("JobsApi.Models.WorkModel", b =>
-                {
-                    b.HasOne("JobsApi.Models.UserModel", "User")
-                        .WithMany("Works")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("JobsApi.Models.UserModel", b =>
-                {
-                    b.Navigation("Works");
                 });
 #pragma warning restore 612, 618
         }

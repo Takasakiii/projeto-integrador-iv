@@ -14,6 +14,6 @@ public class UserCreateValidator : AbstractValidator<UserCreateDto>
         RuleFor(x => x.Email).NotEmpty().MaximumLength(255);
         RuleFor(x => x.Password).NotEmpty().MinimumLength(8);
         RuleFor(x => x.RepeatPassword).NotEmpty().Equal(x => x.Password);
-        RuleFor(x => x.Type).NotNull().NotEqual(UserDtoType.Admin);
+        RuleFor(x => x.Type).NotNull();
     }
 }

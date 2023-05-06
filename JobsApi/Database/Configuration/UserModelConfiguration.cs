@@ -16,6 +16,8 @@ public class UserModelConfiguration : IEntityTypeConfiguration<UserModel>
         builder.Property(x => x.Type).IsRequired();
         builder.Property(x => x.Password).HasMaxLength(92).IsRequired();
         builder.Property(x => x.ImageId).HasMaxLength(32);
+        builder.Property(x => x.Description).HasMaxLength(255);
+        builder.Property(x => x.Role).HasMaxLength(100);
 
         builder.HasIndex(x => x.Email).IsUnique();
 

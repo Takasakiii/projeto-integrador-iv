@@ -40,7 +40,7 @@ public class JwtService : IJwtService
         var claims = new Claim[]
         {
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString(), ClaimValueTypes.UInteger32),
-            new Claim(ClaimTypes.Role, ((int)user.Type).ToString(), ClaimValueTypes.Integer32)
+            new Claim(ClaimTypes.Role, user.Type.ToString())
         };
 
         var expire = TimeSpan.FromDays(7);

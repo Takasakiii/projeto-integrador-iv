@@ -36,18 +36,6 @@ public class UserService : IUserService
         _paginationService = paginationService;
     }
 
-    public async ValueTask CreateAdminUser()
-    {
-        var model = await _userRepository.GetByEmail("admin@jobs.com");
-
-        if (model is null)
-        {
-            var password = BCrypt.Net.BCrypt.HashPassword(_appConfig.Admin.Password);
-            await _userRepository.Add(new UserModel("Admin", "admin@jobs.com", UserModelType.Admin, password));
-            await _unitOfWork.SaveChanges();
-        }
-    }
-
     public async Task<JwtDto> Login(LoginDto login)
     {
         var model = await _userRepository.GetByEmail(login.Email);

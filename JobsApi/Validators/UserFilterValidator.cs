@@ -9,7 +9,7 @@ public class UserFilterValidator : AbstractValidator<UserFilterDto>
 {
     public UserFilterValidator()
     {
-        RuleFor(x => x.Type).IsInEnum().NotEqual(UserDtoType.Admin);
+        RuleFor(x => x.Type).IsInEnum();
         RuleFor(x => x.PageSize).GreaterThan(0).LessThanOrEqualTo(30);
     }
 }
