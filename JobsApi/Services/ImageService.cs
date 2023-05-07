@@ -57,4 +57,15 @@ public class ImageService : IImageService
 
         return _mapper.Map<ImageDto>(model);
     }
+
+    public async ValueTask Delete(string id)
+    {
+        var model = await _imageRepository.GetById(id);
+
+        if (model is null)
+            throw new NotFoundException("Image", id);
+        
+        _imageRepository.Delete(model);
+        await _unitOfWork.SaveChanges();
+    }
 }

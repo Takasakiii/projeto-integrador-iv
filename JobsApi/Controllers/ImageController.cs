@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using JobsApi.Dtos;
 using JobsApi.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -33,12 +34,22 @@ public class ImageController : ControllerBase
 
     [HttpPost]
     [SwaggerResponse((int)HttpStatusCode.Created, type: typeof(string))]
-    public async Task<IActionResult> Create(IFormFile file)
+    [SwaggerResponse((int)HttpStatusCode.BadRequest, type: typeof(ErrorDto))]
+    public async Task<IActionResult> Post(IFormFile file)
     {
         var image = await _imageService.Create(file);
         return CreatedAtAction(nameof(Get), new
         {
             Id = image
         }, image);
+    }
+
+    [HttpDelete("{id}")]
+    [SwaggerResponse((int)HttpStatusCode.OK)]
+    [SwaggerResponse((int)HttpStatusCode.NotFound, type: typeof(ErrorDto))]
+    public async Task<IActionResult> Delete([FromRoute] string id)
+    {
+        await _imageService.Delete(id);
+        return Ok();
     }
 }
