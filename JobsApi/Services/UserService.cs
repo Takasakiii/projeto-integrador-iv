@@ -21,10 +21,12 @@ public class UserService : IUserService
     private readonly IValidator<UserCreateDto> _userCreateValidator;
     private readonly IValidator<UserFilterDto> _userFilterValidator;
     private readonly IPaginationService _paginationService;
+    private readonly IValidator<UserUpdateDto> _userUpdateValidator;
 
     public UserService(IUserRepository userRepository, IAppConfig appConfig, IUnitOfWork unitOfWork, IMapper mapper,
         IJwtService jwtService, IValidator<UserCreateDto> userCreateValidator,
-        IValidator<UserFilterDto> userFilterValidator, IPaginationService paginationService)
+        IValidator<UserFilterDto> userFilterValidator, IPaginationService paginationService,
+        IValidator<UserUpdateDto> userUpdateValidator)
     {
         _userRepository = userRepository;
         _appConfig = appConfig;
@@ -34,6 +36,7 @@ public class UserService : IUserService
         _userCreateValidator = userCreateValidator;
         _userFilterValidator = userFilterValidator;
         _paginationService = paginationService;
+        _userUpdateValidator = userUpdateValidator;
     }
 
     public async Task<JwtDto> Login(LoginDto login)
@@ -78,11 +81,30 @@ public class UserService : IUserService
     public async Task<IEnumerable<UserDto>> List(UserFilterDto userFilter)
     {
         await _userFilterValidator.ValidateAndThrowAsync(userFilter);
-        
+
         var (users, count) = await _userRepository.Filter(userFilter);
-        
+
         _paginationService.SetCount(count);
 
         return _mapper.Map<IEnumerable<UserDto>>(users);
+    }
+
+    public async Task<UserDto> Update(UserUpdateDto userUpdate, uint userId, uint requestUserId)
+    {
+        await _userUpdateValidator.ValidateAndThrowAsync(userUpdate);
+        
+        if (userId != requestUserId)
+            throw new PermissionException("No permission to update this user");
+
+        var user = await _userRepository.GetById(userId);
+
+        if (user is null)
+            throw new NotFoundException("User", userId);
+        
+        user = _mapper.Map(userUpdate, user);
+        _userRepository.Update(user);
+        await _unitOfWork.SaveChanges();
+
+        return _mapper.Map<UserDto>(user);
     }
 }

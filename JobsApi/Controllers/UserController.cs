@@ -68,4 +68,17 @@ public class UserController : ControllerBase
         var users = await _userService.List(userFilter);
         return Ok(users);
     }
+
+    [HttpPut("{id}")]
+    [Authorize]
+    [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(UserDto))]
+    [SwaggerResponse((int)HttpStatusCode.Forbidden, type: typeof(ErrorDto))]
+    [SwaggerResponse((int)HttpStatusCode.NotFound, type: typeof(ErrorDto))]
+    public async Task<IActionResult> Update([FromBody] UserUpdateDto userUpdate, [FromRoute] uint id)
+    {
+        var userId = User.GetId();
+        var user = await _userService.Update(userUpdate, id, userId);
+
+        return Ok(user);
+    }
 }

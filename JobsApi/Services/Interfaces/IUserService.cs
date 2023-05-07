@@ -8,4 +8,5 @@ public interface IUserService
     Task<UserDto> GetById(uint id);
     Task<UserDto> Create(UserCreateDto userCreate);
     Task<IEnumerable<UserDto>> List(UserFilterDto userFilter);
+    Task<UserDto> Update(UserUpdateDto userUpdate, uint userId, uint requestUserId);
 }
