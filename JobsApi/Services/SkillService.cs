@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using JobsApi.Dtos;
+using JobsApi.Exceptions;
 using JobsApi.Models;
 using JobsApi.Repositories.Interfaces;
 using JobsApi.Services.Interfaces;
@@ -33,6 +34,16 @@ public class SkillService : ISkillService
 
         await _skillRepository.Add(model);
         await _unitOfWork.SaveChanges();
+
+        return _mapper.Map<SkillDto>(model);
+    }
+
+    public async Task<SkillDto> GetById(uint id)
+    {
+        var model = await _skillRepository.GetById(id);
+
+        if (model is null)
+            throw new NotFoundException("Skill", id);
 
         return _mapper.Map<SkillDto>(model);
     }
