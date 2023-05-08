@@ -23,4 +23,5 @@ public class UserModel
     public ImageModel? Image { get; set; }
     
     public IEnumerable<WorkModel>? Works { get; set; }
+    public IEnumerable<UserSkillModel> Skills { get; set; }
 }
