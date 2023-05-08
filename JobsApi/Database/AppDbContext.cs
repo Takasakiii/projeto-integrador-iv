@@ -20,6 +20,7 @@ public class AppDbContext : DbContext
     public DbSet<ImageModel> Images => Set<ImageModel>();
     public DbSet<WorkModel> Works => Set<WorkModel>();
     public DbSet<UserSkillModel> UsersSkills => Set<UserSkillModel>();
+    public DbSet<WorkSkillModel> WorksSkills => Set<WorkSkillModel>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

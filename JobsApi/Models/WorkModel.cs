@@ -20,4 +20,5 @@ public class WorkModel
     
     public uint UserId { get; set; }
     public UserModel? User { get; set; }
+    public IEnumerable<WorkSkillModel>? Skills { get; set; }
 }

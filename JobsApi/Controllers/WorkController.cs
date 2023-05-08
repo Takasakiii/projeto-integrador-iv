@@ -11,51 +11,50 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
-namespace JobsApi.Controllers
+namespace JobsApi.Controllers;
+
+[Route("api/works")]
+[ApiController]
+public class WorkController : ControllerBase
 {
-    [Route("api/works")]
-    [ApiController]
-    public class WorkController : ControllerBase
+    private readonly IWorkService _workService;
+
+    public WorkController(IWorkService workService)
     {
-        private readonly IWorkService _workService;
+        _workService = workService;
+    }
 
-        public WorkController(IWorkService workService)
+    [HttpGet("{id}")]
+    [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(WorkDto))]
+    [SwaggerResponse((int)HttpStatusCode.NotFound, type: typeof(ErrorDto))]
+    public async Task<IActionResult> Get([FromRoute] uint id)
+    {
+        var work = await _workService.GetById(id);
+        return Ok(work);
+    }
+
+    [HttpPost]
+    [Authorize(Roles = nameof(UserDtoType.Professional))]
+    [SwaggerResponse((int)HttpStatusCode.Created, type: typeof(WorkDto))]
+    [SwaggerResponse((int)HttpStatusCode.Unauthorized)]
+    [SwaggerResponse((int)HttpStatusCode.Forbidden, type: typeof(ErrorDto))]
+    public async Task<IActionResult> Post([FromBody] WorkCreateDto workCreate)
+    {
+        var userId = User.GetId();
+
+        var work = await _workService.Create(workCreate, userId);
+
+        return CreatedAtAction(nameof(Get), new
         {
-            _workService = workService;
-        }
+            work.Id
+        }, work);
+    }
 
-        [HttpGet("{id}")]
-        [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(WorkDto))]
-        [SwaggerResponse((int)HttpStatusCode.NotFound, type: typeof(ErrorDto))]
-        public async Task<IActionResult> Get([FromRoute] uint id)
-        {
-            var work = await _workService.GetById(id);
-            return Ok(work);
-        }
-
-        [HttpPost]
-        [Authorize(Roles = nameof(UserDtoType.Professional))]
-        [SwaggerResponse((int)HttpStatusCode.Created, type: typeof(WorkDto))]
-        [SwaggerResponse((int)HttpStatusCode.Unauthorized)]
-        [SwaggerResponse((int)HttpStatusCode.Forbidden, type: typeof(ErrorDto))]
-        public async Task<IActionResult> Post([FromBody] WorkCreateDto workCreate)
-        {
-            var userId = User.GetId();
-
-            var work = await _workService.Create(workCreate, userId);
-
-            return CreatedAtAction(nameof(Get), new
-            {
-                work.Id
-            }, work);
-        }
-
-        [HttpGet]
-        [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(IEnumerable<WorkDto>))]
-        public async Task<IActionResult> List([FromQuery] WorkFilterDto workFilter)
-        {
-            var works = await _workService.List(workFilter);
-            return Ok(works);
-        }
+    [HttpGet]
+    [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(IEnumerable<WorkDto>))]
+    public async Task<IActionResult> List([FromQuery] WorkFilterDto workFilter)
+    {
+        var works = await _workService.List(workFilter);
+        return Ok(works);
     }
 }
