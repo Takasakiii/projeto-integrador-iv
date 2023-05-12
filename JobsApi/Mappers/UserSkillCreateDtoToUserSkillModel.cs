@@ -9,5 +9,8 @@ public class UserSkillCreateDtoToUserSkillModel : DynamicMapperProfile<UserSkill
 {
     protected override void Map(IMappingExpression<UserSkillCreateDto, UserSkillModel> mappingExpression)
     {
+        mappingExpression.ForCtorParam(nameof(UserSkillModel.UserId), x => x.MapFrom(_ => 0));
+        mappingExpression.ForCtorParam(nameof(UserSkillModel.SkillId), x => x.MapFrom(_ => 0));
+        mappingExpression.ForMember(x => x.Skill, y => y.Ignore());
     }
 }

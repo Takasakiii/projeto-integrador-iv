@@ -10,5 +10,6 @@ public class UserSkillFilterValidator : AbstractValidator<UserSkillFilterDto>
     public UserSkillFilterValidator()
     {
         RuleFor(x => x.UserId).NotEqual((uint?)0);
+        RuleFor(x => x.SkillId).NotEqual((uint?)0);
     }
 }

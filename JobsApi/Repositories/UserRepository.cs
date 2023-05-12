@@ -34,4 +34,10 @@ public class UserRepository : BaseRepository<UserModel>, IUserRepository
 
         return (users, count);
     }
+
+    public new async Task<UserModel?> GetById(uint id)
+    {
+        return await _context.Users.Include(x => x.Skills).ThenInclude(x => x.Skill)
+            .FirstOrDefaultAsync(x => x.Id == id);
+    }
 }

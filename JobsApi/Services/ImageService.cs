@@ -25,9 +25,9 @@ public class ImageService : IImageService
 
     public async Task<string> Create(IFormFile file)
     {
-        if (file.Length > 1024 * 1024 * 4) throw new ImageException("Image too large");
+        if (file.Length > 1024 * 1024 * 4) throw new ImageException("Image to large");
 
-        if (!file.ContentType.StartsWith("image/")) throw new ImageException("Not sported type");
+        if (!file.ContentType.StartsWith("image/")) throw new ImageException("Type not supported");
 
         var buffer = new byte[file.Length];
         _ = await file.OpenReadStream().ReadAsync(buffer);

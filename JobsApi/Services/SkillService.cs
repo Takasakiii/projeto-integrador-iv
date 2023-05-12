@@ -47,4 +47,28 @@ public class SkillService : ISkillService
 
         return _mapper.Map<SkillDto>(model);
     }
+
+    public async Task<IEnumerable<SkillDto>> List()
+    {
+        var models = await _skillRepository.List();
+
+        return _mapper.Map<IEnumerable<SkillDto>>(models);
+    }
+
+    public async Task<SkillDto> GetOrCreate(SkillCreateDto skillCreate)
+    {
+        await _skillCreateValidator.ValidateAndThrowAsync(skillCreate);
+        
+        var model = await _skillRepository.GetByName(skillCreate.Name.ToUpper());
+
+        if (model is null)
+        {
+            model = _mapper.Map<SkillModel>(skillCreate);
+            model.Name = model.Name.ToUpper();
+            await _skillRepository.Add(model);
+            await _unitOfWork.SaveChanges();
+        }
+        
+        return _mapper.Map<SkillDto>(model);
+    }
 }

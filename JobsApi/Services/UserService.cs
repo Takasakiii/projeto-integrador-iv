@@ -22,11 +22,15 @@ public class UserService : IUserService
     private readonly IValidator<UserFilterDto> _userFilterValidator;
     private readonly IPaginationService _paginationService;
     private readonly IValidator<UserUpdateDto> _userUpdateValidator;
+    private readonly IValidator<UserSkillCreateDto> _userSkillCreateValidator;
+    private readonly ISkillService _skillService;
+    private readonly IUserSkillService _userSkillService;
 
     public UserService(IUserRepository userRepository, IAppConfig appConfig, IUnitOfWork unitOfWork, IMapper mapper,
         IJwtService jwtService, IValidator<UserCreateDto> userCreateValidator,
         IValidator<UserFilterDto> userFilterValidator, IPaginationService paginationService,
-        IValidator<UserUpdateDto> userUpdateValidator)
+        IValidator<UserUpdateDto> userUpdateValidator, IValidator<UserSkillCreateDto> userSkillCreateValidator,
+        ISkillService skillService, IUserSkillService userSkillService)
     {
         _userRepository = userRepository;
         _appConfig = appConfig;
@@ -37,6 +41,9 @@ public class UserService : IUserService
         _userFilterValidator = userFilterValidator;
         _paginationService = paginationService;
         _userUpdateValidator = userUpdateValidator;
+        _userSkillCreateValidator = userSkillCreateValidator;
+        _skillService = skillService;
+        _userSkillService = userSkillService;
     }
 
     public async Task<JwtDto> Login(LoginDto login)
@@ -92,7 +99,7 @@ public class UserService : IUserService
     public async Task<UserDto> Update(UserUpdateDto userUpdate, uint userId, uint requestUserId)
     {
         await _userUpdateValidator.ValidateAndThrowAsync(userUpdate);
-        
+
         if (userId != requestUserId)
             throw new PermissionException("No permission to update this user");
 
@@ -100,8 +107,9 @@ public class UserService : IUserService
 
         if (user is null)
             throw new NotFoundException("User", userId);
-        
+
         user = _mapper.Map(userUpdate, user);
+
         _userRepository.Update(user);
         await _unitOfWork.SaveChanges();
 

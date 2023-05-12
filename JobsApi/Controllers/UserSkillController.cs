@@ -55,7 +55,7 @@ public class UserSkillController : ControllerBase
 
         return Ok(userSkill);
     }
-
+    
     [HttpDelete("{id}")]
     [Authorize]
     public async Task<IActionResult> Delete([FromRoute] uint id)

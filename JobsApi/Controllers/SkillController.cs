@@ -42,4 +42,12 @@ public class SkillController : ControllerBase
             skill.Id
         }, skill);
     }
+
+    [HttpGet]
+    [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(IEnumerable<SkillDto>))]
+    public async Task<IActionResult> List()
+    {
+        var skills = await _skillService.List();
+        return Ok(skills);
+    }
 }

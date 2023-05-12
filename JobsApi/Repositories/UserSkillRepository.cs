@@ -20,6 +20,12 @@ public class UserSkillRepository : BaseRepository<UserSkillModel>, IUserSkillRep
     public async Task<IEnumerable<UserSkillModel>> Filter(UserSkillFilterDto filter)
     {
         return await _context.UsersSkills.Where(x => !filter.UserId.HasValue || x.UserId == filter.UserId.Value)
+            .Where(x => !filter.SkillId.HasValue || x.SkillId == filter.SkillId.Value)
             .ToListAsync();
+    }
+
+    public async Task<UserSkillModel?> GetByUserAndSkill(uint userId, uint skillId)
+    {
+        return await _context.UsersSkills.FirstOrDefaultAsync(x => x.UserId == userId && x.SkillId == skillId);
     }
 }

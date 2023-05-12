@@ -1,3 +1,3 @@
 ﻿namespace JobsApi.Dtos;
 
-public record UserSkillFilterDto(uint? UserId);
+public record UserSkillFilterDto(uint? UserId, uint? SkillId);

@@ -4,6 +4,7 @@ using JobsApi.Repositories.Interfaces;
 using Lina.DynamicServicesProvider.Attributes;
 using Lina.UtilsExtensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using MySqlConnector;
 
 namespace JobsApi.Repositories;
@@ -34,5 +35,10 @@ public class UnitOfWork : IUnitOfWork
             var message = sqlException.Message;
             throw new DuplicateException(message);
         }
+    }
+    
+    public async Task<IDbContextTransaction> Begin()
+    {
+        return await _dbContext.Database.BeginTransactionAsync();
     }
 }

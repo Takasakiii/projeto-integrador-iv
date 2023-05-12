@@ -1,3 +1,3 @@
 ﻿namespace JobsApi.Dtos;
 
-public record UserSkillCreateDto(uint UserId, uint SkillId, UserSkillDtoLevel Level, uint Years);
+public record UserSkillCreateDto(uint Id, string Skill, UserSkillDtoLevel Level, uint Years);

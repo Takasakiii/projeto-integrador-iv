@@ -11,7 +11,7 @@
         <PackageReference Include="Config.Net" Version="5.1.5" />
         <PackageReference Include="cuid.net" Version="3.0.1" />
         <PackageReference Include="FluentValidation" Version="11.5.2" />
-        <PackageReference Include="Lina" Version="1.0.1" />
+        <PackageReference Include="Lina" Version="1.0.2" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.16" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.16" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.16">

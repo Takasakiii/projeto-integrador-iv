@@ -9,5 +9,6 @@ public class UserUpdateDtoToUserModel : DynamicMapperProfile<UserUpdateDto, User
 {
     protected override void Map(IMappingExpression<UserUpdateDto, UserModel> mappingExpression)
     {
+        mappingExpression.ForMember(x => x.Skills, y => y.Ignore());
     }
 }

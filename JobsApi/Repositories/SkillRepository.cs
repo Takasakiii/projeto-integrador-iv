@@ -2,6 +2,7 @@
 using JobsApi.Models;
 using JobsApi.Repositories.Interfaces;
 using Lina.DynamicServicesProvider.Attributes;
+using Microsoft.EntityFrameworkCore;
 
 namespace JobsApi.Repositories;
 
@@ -13,5 +14,15 @@ public class SkillRepository : BaseRepository<SkillModel>, ISkillRepository
     public SkillRepository(AppDbContext context) : base(context)
     {
         _context = context;
+    }
+
+    public async Task<IEnumerable<SkillModel>> List()
+    {
+        return await _context.Skills.ToListAsync();
+    }
+
+    public async Task<SkillModel?> GetByName(string name)
+    {
+        return await _context.Skills.FirstOrDefaultAsync(x => x.Name == name);
     }
 }
