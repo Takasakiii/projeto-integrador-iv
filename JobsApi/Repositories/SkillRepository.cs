@@ -1,4 +1,5 @@
-﻿using JobsApi.Database;
+﻿using System.Collections;
+using JobsApi.Database;
 using JobsApi.Models;
 using JobsApi.Repositories.Interfaces;
 using Lina.DynamicServicesProvider.Attributes;

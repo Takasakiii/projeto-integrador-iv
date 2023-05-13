@@ -28,4 +28,13 @@ public class UserSkillRepository : BaseRepository<UserSkillModel>, IUserSkillRep
     {
         return await _context.UsersSkills.FirstOrDefaultAsync(x => x.UserId == userId && x.SkillId == skillId);
     }
+
+    public async Task<IEnumerable<UserSkillModel>> GetMostUsed()
+    {
+        return await _context.UsersSkills.Include(x => x.Skill)
+            .GroupBy(x => x.UserId)
+            .Select(x => x.OrderByDescending(y => y.Years).ToList())
+            .Select(x => x.First())
+            .ToListAsync();
+    }
 }

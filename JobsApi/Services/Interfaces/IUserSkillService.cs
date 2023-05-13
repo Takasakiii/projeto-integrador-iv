@@ -9,4 +9,5 @@ public interface IUserSkillService
     ValueTask Delete(uint id, uint userId);
     Task<UserSkillDto?> GetByUserAndSkill(uint userId, uint skillId);
     Task<UserSkillDto> Create(UserSkillCreateDto userSkillCreate, uint userId);
+    Task<IEnumerable<UserSkillDto>> MostUsed();
 }

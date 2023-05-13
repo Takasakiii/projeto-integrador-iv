@@ -99,4 +99,12 @@ public class UserSkillService : IUserSkillService
         var model = await _userSkillRepository.GetByUserAndSkill(userId, skillId);
         return _mapper.Map<UserSkillDto?>(model);
     }
+    
+    
+    public async Task<IEnumerable<UserSkillDto>> MostUsed()
+    {
+        var skills = await _userSkillRepository.GetMostUsed();
+
+        return _mapper.Map<IEnumerable<UserSkillDto>>(skills);
+    }
 }
