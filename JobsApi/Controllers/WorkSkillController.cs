@@ -32,20 +32,4 @@ public class WorkSkillController : ControllerBase
         var workSkill = await _workSkillService.GetById(id);
         return Ok(workSkill);
     }
-
-    [HttpPost]
-    [Authorize]
-    [SwaggerResponse((int)HttpStatusCode.Created, type: typeof(WorkSkillDto))]
-    [SwaggerResponse((int)HttpStatusCode.Unauthorized, type: typeof(ErrorDto))]
-    [SwaggerResponse((int)HttpStatusCode.Forbidden, type: typeof(ErrorDto))]
-    [SwaggerResponse((int)HttpStatusCode.Conflict, type: typeof(ErrorDto))]
-    public async Task<IActionResult> Post([FromBody] WorkSkillCreateDto workSkillCreate)
-    {
-        var userId = User.GetId();
-        var workSkill = await _workSkillService.Create(workSkillCreate, userId);
-        return CreatedAtAction(nameof(Get), new
-        {
-            workSkill.Id
-        }, workSkill);
-    }
 }

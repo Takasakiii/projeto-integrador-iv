@@ -9,5 +9,7 @@ public class WorkCreateDtoToWorkModel : DynamicMapperProfile<WorkCreateDto, Work
 {
     protected override void Map(IMappingExpression<WorkCreateDto, WorkModel> mappingExpression)
     {
+        mappingExpression.ForCtorParam(nameof(WorkModel.UserId), x => x.MapFrom(_ => 0));
+        mappingExpression.ForMember(x => x.Skills, y => y.Ignore());
     }
 }

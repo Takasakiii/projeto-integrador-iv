@@ -14,6 +14,5 @@ public class WorkCreateValidator : AbstractValidator<WorkCreateDto>
             .MaximumLength(255);
         RuleFor(x => x.Value).NotEmpty();
         RuleFor(x => x.StartAt).NotEmpty();
-        RuleFor(x => x.UserId).NotEmpty();
     }
 }

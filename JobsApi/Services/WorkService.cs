@@ -16,28 +16,45 @@ public class WorkService : IWorkService
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly IValidator<WorkCreateDto> _workCreateValidator;
+    private readonly IWorkSkillService _workSkillService;
 
     public WorkService(IWorkRepository workRepository, IUnitOfWork unitOfWork, IMapper mapper,
-        IValidator<WorkCreateDto> workCreateValidator)
+        IValidator<WorkCreateDto> workCreateValidator, IWorkSkillService workSkillService)
     {
         _workRepository = workRepository;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _workCreateValidator = workCreateValidator;
+        _workSkillService = workSkillService;
     }
 
     public async Task<WorkDto> Create(WorkCreateDto workCreate, uint userId)
     {
         await _workCreateValidator.ValidateAndThrowAsync(workCreate);
 
-        if (workCreate.UserId != userId)
-            throw new PermissionException("No permission to create for this user");
+        var model = await _workRepository.GetById(workCreate.Id) ?? _mapper.Map<WorkModel>(workCreate);
 
-        var model = _mapper.Map<WorkModel>(workCreate);
+        if (model is null)
+            throw new NotFoundException("Work", workCreate.Id);
 
-        await _workRepository.Add(model);
+        model = _mapper.Map(workCreate, model);
+        
+        model.UserId = userId;
+
+        if (model.Id == 0)
+        {
+            await _workRepository.Add(model);
+        }
+        else
+        {
+            _workRepository.Update(model);
+        }
+        
         await _unitOfWork.SaveChanges();
 
+        if (workCreate.Skills is not null) 
+            await _workSkillService.Create(workCreate.Skills, model.Id);
+        
         return _mapper.Map<WorkDto>(model);
     }
 

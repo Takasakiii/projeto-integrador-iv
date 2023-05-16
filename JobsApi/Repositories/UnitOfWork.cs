@@ -41,4 +41,9 @@ public class UnitOfWork : IUnitOfWork
     {
         return await _dbContext.Database.BeginTransactionAsync();
     }
+    
+    public void ClearContext()
+    {
+        _dbContext.ChangeTracker.Clear();
+    }
 }
