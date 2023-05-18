@@ -6,5 +6,4 @@ public interface IUnitOfWork
 {
     ValueTask SaveChanges();
     Task<IDbContextTransaction> Begin();
-    void ClearContext();
 }

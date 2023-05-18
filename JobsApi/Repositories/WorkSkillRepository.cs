@@ -18,7 +18,7 @@ public class WorkSkillRepository : BaseRepository<WorkSkillModel>, IWorkSkillRep
 
     public async Task<IEnumerable<WorkSkillModel>> GetByWork(uint workId)
     {
-        return await _context.WorksSkills.Where(x => x.WorkId == workId).ToListAsync();
+        return await _context.WorksSkills.AsNoTracking().Where(x => x.WorkId == workId).ToListAsync();
     }
 
     public void DeleteRange(IEnumerable<WorkSkillModel> models)

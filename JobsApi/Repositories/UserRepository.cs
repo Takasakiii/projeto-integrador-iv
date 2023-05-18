@@ -42,6 +42,13 @@ public class UserRepository : BaseRepository<UserModel>, IUserRepository
             .ThenInclude(x => x.Skill)
             .Include(x => x.Works)
             .ThenInclude(x => x.Skills)
+            .ThenInclude(x => x.Skill)
+            .FirstOrDefaultAsync(x => x.Id == id);
+    }
+    
+    public new async Task<UserModel?> GetByIdNoIncludes(uint id)
+    {
+        return await _context.Users
             .FirstOrDefaultAsync(x => x.Id == id);
     }
 }

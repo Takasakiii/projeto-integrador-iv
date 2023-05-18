@@ -17,8 +17,9 @@ public class WorkSkillService : IWorkSkillService
     private readonly IMapper _mapper;
     private readonly IValidator<WorkSkillCreateDto> _workSkillCreateValidator;
     private readonly ISkillService _skillService;
-        public WorkSkillService(IWorkSkillRepository workSkillRepository, IUnitOfWork unitOfWork, IMapper mapper,
-            IValidator<WorkSkillCreateDto> workSkillCreateValidator, ISkillService skillService)
+
+    public WorkSkillService(IWorkSkillRepository workSkillRepository, IUnitOfWork unitOfWork, IMapper mapper,
+        IValidator<WorkSkillCreateDto> workSkillCreateValidator, ISkillService skillService)
     {
         _workSkillRepository = workSkillRepository;
         _unitOfWork = unitOfWork;
@@ -39,19 +40,19 @@ public class WorkSkillService : IWorkSkillService
 
     public async Task Create(IEnumerable<string> skills, uint workId)
     {
-        var workSkills = await _workSkillRepository.GetByWork(workId);
-        
-        _workSkillRepository.DeleteRange(workSkills);
-        await _unitOfWork.SaveChanges();
-        _unitOfWork.ClearContext();
+        {
+            var workSkills = await _workSkillRepository.GetByWork(workId);
+
+            _workSkillRepository.DeleteRange(workSkills);
+            await _unitOfWork.SaveChanges();
+        }
 
         foreach (var skillName in skills)
         {
             var skill = await _skillService.GetOrCreate(new SkillCreateDto(skillName));
 
             await _workSkillRepository.Add(new WorkSkillModel(workId, skill.Id));
+            await _unitOfWork.SaveChanges();
         }
-
-        await _unitOfWork.SaveChanges();
     }
 }

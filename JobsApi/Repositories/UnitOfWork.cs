@@ -25,6 +25,7 @@ public class UnitOfWork : IUnitOfWork
         try
         {
             await _dbContext.SaveChangesAsync();
+            _dbContext.ChangeTracker.Clear();
         }
         catch (DbUpdateException ex)
         {
@@ -40,10 +41,5 @@ public class UnitOfWork : IUnitOfWork
     public async Task<IDbContextTransaction> Begin()
     {
         return await _dbContext.Database.BeginTransactionAsync();
-    }
-    
-    public void ClearContext()
-    {
-        _dbContext.ChangeTracker.Clear();
     }
 }

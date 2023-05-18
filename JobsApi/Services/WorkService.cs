@@ -74,4 +74,18 @@ public class WorkService : IWorkService
 
         return _mapper.Map<IEnumerable<WorkDto>>(works);
     }
+
+    public async ValueTask Delete(uint id, uint userId)
+    {
+        var work = await _workRepository.GetById(id);
+
+        if (work is null)
+            throw new NotFoundException("Work", id);
+        
+        if (work.UserId != userId)
+            throw new PermissionException("No permission to change this user");
+        
+        _workRepository.Delete(work);
+        await _unitOfWork.SaveChanges();
+    }
 }

@@ -57,4 +57,12 @@ public class WorkController : ControllerBase
         var works = await _workService.List(workFilter);
         return Ok(works);
     }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete([FromRoute] uint id)
+    {
+        var userId = User.GetId();
+        await _workService.Delete(id, userId);
+        return Ok();
+    }
 }

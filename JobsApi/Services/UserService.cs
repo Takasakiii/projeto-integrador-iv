@@ -103,7 +103,7 @@ public class UserService : IUserService
         if (userId != requestUserId)
             throw new PermissionException("No permission to update this user");
 
-        var user = await _userRepository.GetById(userId);
+        var user = await _userRepository.GetByIdNoIncludes(userId);
 
         if (user is null)
             throw new NotFoundException("User", userId);
