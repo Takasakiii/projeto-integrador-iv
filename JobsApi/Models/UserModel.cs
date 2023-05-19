@@ -24,4 +24,5 @@ public class UserModel
     
     public IEnumerable<WorkModel>? Works { get; set; }
     public IEnumerable<UserSkillModel>? Skills { get; set; }
+    public IEnumerable<JobModel>? Jobs { get; set; }
 }

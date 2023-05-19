@@ -38,15 +38,18 @@ public class UserRepository : BaseRepository<UserModel>, IUserRepository
     public new async Task<UserModel?> GetById(uint id)
     {
         return await _context.Users
-            .Include(x => x.Skills)
+            .Include(x => x.Skills)!
             .ThenInclude(x => x.Skill)
-            .Include(x => x.Works)
-            .ThenInclude(x => x.Skills)
+            .Include(x => x.Works)!
+            .ThenInclude(x => x.Skills)!
+            .ThenInclude(x => x.Skill)
+            .Include(x => x.Jobs)!
+            .ThenInclude(x => x.Skills)!
             .ThenInclude(x => x.Skill)
             .FirstOrDefaultAsync(x => x.Id == id);
     }
     
-    public new async Task<UserModel?> GetByIdNoIncludes(uint id)
+    public async Task<UserModel?> GetByIdNoIncludes(uint id)
     {
         return await _context.Users
             .FirstOrDefaultAsync(x => x.Id == id);

@@ -16,6 +16,6 @@ public class JobModelConfiguration : IEntityTypeConfiguration<JobModel>
         builder.Property(x => x.UserId).IsRequired();
         builder.Property(x => x.Value).IsRequired();
 
-        builder.HasOne(x => x.User).WithMany().OnDelete(DeleteBehavior.Restrict);
+        builder.HasOne(x => x.User).WithMany(x => x.Jobs).OnDelete(DeleteBehavior.Restrict);
     }
 }

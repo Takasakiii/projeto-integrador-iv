@@ -21,6 +21,8 @@ public class AppDbContext : DbContext
     public DbSet<WorkModel> Works => Set<WorkModel>();
     public DbSet<UserSkillModel> UsersSkills => Set<UserSkillModel>();
     public DbSet<WorkSkillModel> WorksSkills => Set<WorkSkillModel>();
+    public DbSet<JobModel> Jobs => Set<JobModel>();
+    public DbSet<JobSkillModel> JobSkills => Set<JobSkillModel>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
