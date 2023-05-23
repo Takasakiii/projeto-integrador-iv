@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+  database:
+    image: docker.io/library/mariadb:10.5
+    container_name: jobs_database
+    restart: always
+    volumes:
+      - mariadb:/var/lib/mysql
+    environment:
+      MARIADB_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "--silent" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  api:
+    build:
+      context: ./JobsApi
+      args:
+        GITHUB_TOKEN: ${GITHUB_TOKEN}
+        GITHUB_NAME: ${GITHUB_NAME}
+    container_name: jobs_api
+    restart: always
+    depends_on:
+      database:
+        condition: service_healthy
+    ports:
+      - ${API_BINDING_IP}:${API_PORT}:80
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
+      DATABASE_URL: Server=database;Database=jobs;User Id=root;Password=${DATABASE_PASSWORD};
+      JWT_SECRET: ${JWT_SECRET}
+  app:
+    build:
+      context: ./JobsApp
+      args:
+        NEXT_PUBLIC_API_URL: ${API_URL}
+    ports:
+      - ${APP_BINDING_IP}:${APP_PORT}:3000
+
+volumes:
+  mariadb:
