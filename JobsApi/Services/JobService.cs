@@ -69,4 +69,18 @@ public class JobService : IJobService
         _jobRepository.Delete(model);
         await _unitOfWork.SaveChanges();
     }
+
+    public async Task<IEnumerable<JobDto>> List()
+    {
+        var models = await _jobRepository.ListWithIncludes();
+
+        return _mapper.Map<IEnumerable<JobDto>>(models);
+    }
+
+    public async Task<IEnumerable<JobLevelCountDto>> GetJobLevelCount()
+    {
+        var result = await _jobRepository.GetJobLevelCount();
+
+        return result.OrderByDescending(x => x.Count);
+    }
 }

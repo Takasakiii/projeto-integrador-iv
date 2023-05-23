@@ -1,12 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using JobsApi.Dtos;
 using JobsApi.Extensions;
 using JobsApi.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JobsApi.Controllers;
@@ -20,6 +15,13 @@ public class JobController : ControllerBase
     public JobController(IJobService jobService)
     {
         _jobService = jobService;
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> List()
+    {
+        var jobs = await _jobService.List();
+        return Ok(jobs);
     }
 
     [HttpPost]

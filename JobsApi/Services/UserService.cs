@@ -115,4 +115,11 @@ public class UserService : IUserService
 
         return _mapper.Map<UserDto>(user);
     }
+
+    public async Task<IEnumerable<SkillCountDto>> GetSkillCount()
+    {
+        var result = await _userRepository.GetSkillCount();
+
+        return result;
+    }
 }

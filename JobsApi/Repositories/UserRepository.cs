@@ -48,10 +48,19 @@ public class UserRepository : BaseRepository<UserModel>, IUserRepository
             .ThenInclude(x => x.Skill)
             .FirstOrDefaultAsync(x => x.Id == id);
     }
-    
+
     public async Task<UserModel?> GetByIdNoIncludes(uint id)
     {
         return await _context.Users
             .FirstOrDefaultAsync(x => x.Id == id);
+    }
+
+    public async Task<IEnumerable<SkillCountDto>> GetSkillCount()
+    {
+        return await _context.Users.Include(x => x.Skills)
+            .Where(x => x.Type == UserModelType.Professional)
+            .GroupBy(x => x.Skills == null ? 0 : x.Skills.ToList().Count)
+            .Select(x => new SkillCountDto($"{x.Key} Skill{(x.Key > 1 ? "s" : "")}", x.Count()))
+            .ToListAsync();
     }
 }

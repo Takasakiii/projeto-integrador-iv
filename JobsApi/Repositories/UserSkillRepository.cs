@@ -37,4 +37,13 @@ public class UserSkillRepository : BaseRepository<UserSkillModel>, IUserSkillRep
             .Select(x => x.First())
             .ToListAsync();
     }
+    
+    public async Task<IEnumerable<UserSkillModel>> GetLessUsed()
+    {
+        return await _context.UsersSkills.Include(x => x.Skill)
+            .GroupBy(x => x.UserId)
+            .Select(x => x.OrderByDescending(y => y.Years).ToList())
+            .Select(x => x.Last())
+            .ToListAsync();
+    }
 }

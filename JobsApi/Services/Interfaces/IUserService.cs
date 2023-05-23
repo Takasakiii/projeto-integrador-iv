@@ -9,4 +9,5 @@ public interface IUserService
     Task<UserDto> Create(UserCreateDto userCreate);
     Task<IEnumerable<UserDto>> List(UserFilterDto userFilter);
     Task<UserDto> Update(UserUpdateDto userUpdate, uint userId, uint requestUserId);
+    Task<IEnumerable<SkillCountDto>> GetSkillCount();
 }

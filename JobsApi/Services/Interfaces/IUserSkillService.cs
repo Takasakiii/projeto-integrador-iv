@@ -10,4 +10,5 @@ public interface IUserSkillService
     Task<UserSkillDto?> GetByUserAndSkill(uint userId, uint skillId);
     Task<UserSkillDto> Create(UserSkillCreateDto userSkillCreate, uint userId);
     Task<IEnumerable<UserSkillDto>> MostUsed();
+    Task<IEnumerable<UserSkillDto>> LessUsed();
 }
